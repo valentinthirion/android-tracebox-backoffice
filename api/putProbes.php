@@ -15,33 +15,20 @@
 		$xml = simplexml_load_file("probe.xml");
 	    foreach ($xml as $probe)
 	    {
-		    
 	    	// New Probe
-	    	$destination = $probe['address'];
-	    	$starttime = $probe['destination'];
-	    	$endtime = $probe['endtime'];
-	    	$connectivity = $probe['connectivityType'];
-	    	$location = $probe['location'];
-
 			// Instert the probe in database
-			$probe_id = addNewProbe($destination, $starttime, $endtime, $connectivity, $location);
+			$probe_id = addNewProbe($probe['address'], $probe['starttime'], $probe['endtime'], $probe['connectivityType'], $probe['location']);
 
 			foreach ($probe as $router)
 			{
 				// New Router
-				$address = $router['address'];
-				$ttl = $router['ttl'];
-
 				// Inster the router in database
-				$router_id = addNewRouter($probe_id, $address, $ttl);
+				$router_id = addNewRouter($probe_id, $router['address'], $router['ttl']);
 
 				foreach ($router as $packetmodification)
 				{
 					// New Packet modification
-					$layer = $packetmodification['layer'];
-					$field = $packetmodification['field'];
-
-					$mod_id = addNewPacketModification($router_id, $layer, $field);
+					$mod_id = addNewPacketModification($router_id, $packetmodification['layer'], $packetmodification['field']);
 				}
 			}
 	    }

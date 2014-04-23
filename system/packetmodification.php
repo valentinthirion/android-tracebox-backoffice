@@ -10,4 +10,11 @@
 		return mysql_insert_id();
 	}
 
+    function getPacketModificationsForRoiterID($id)
+    {
+        $d = mysql_query("SELECT * FROM android_tracebox_packetmodifications WHERE router_id='$id'") or die (mysql_error());
+
+        return $d;
+    }
+
 ?>
