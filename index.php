@@ -1,4 +1,6 @@
 <?php
+	session_start();
+
     include("system/config.php");
 
     $page = "";
@@ -46,6 +48,45 @@
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
     </head>
+
+	<?php
+
+		$message = array();
+		if (isset($_POST['logIn']))
+		{
+			if ($_POST['logIn'] != "true")
+				$message = array("alert-danger", "Error while logging in.");
+			else
+			{
+				if ($_POST['password'] == "")
+					$message = array("alert-danger", "You have to enter a password.");
+				else
+		        {
+		        	if (!connectUser($_POST['password']))
+		        		$message = array("alert-danger", "Wrong password.");
+		        }
+			}
+		} 
+
+		// Test if user connected
+		if (!isAUserConnected())
+		{
+			include("pages/log.php");
+			showLogMenu($message);
+			return;
+		}
+		// USER DECONECTION
+		if (isset($_GET['disconnect']) && isAUserConnected())
+		{
+			disconnectUser();
+			$message = array("alert-success", "You have been correctly disconnected.");
+			include("pages/log.php");
+			showLogMenu($message);
+
+			return;
+		}
+	?>
+	
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
         <header class="header">
@@ -77,7 +118,7 @@
                                         <a href="#" class="btn btn-default btn-flat">About</a>
                                     </div>
                                     <div class="pull-right">
-                                        <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                                        <a href="index.php?disconnect=true" class="btn btn-default btn-flat">Sign out</a>
                                     </div>
                                 </li>
                             </ul>
@@ -150,6 +191,9 @@
                     case "about":
                         include("pages/about.php");
                         break;
+                    case "log":
+                    	include("pages/log.php");
+                    	break;
                     default:
                         include("pages/404.php");
                         break;

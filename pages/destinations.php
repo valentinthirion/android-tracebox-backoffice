@@ -183,7 +183,6 @@
                                                  ?>
                                                     <div class="alert <?php echo $message[0]; ?>">
                                                         <i class="fa fa-ban"></i>
-                                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                                         <?php echo $message[1]; ?>
                                                     </div>
                                                 <?php
