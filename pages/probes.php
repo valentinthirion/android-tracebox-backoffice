@@ -12,6 +12,9 @@
             case "delete":
                 showProbesList();
                 break;
+            case "probes_for_destination":
+            	showProbesForDestination($_GET['destination_id']);
+            	break;
             default:
                 include("404.php");
                 break;
@@ -43,8 +46,17 @@
                     <div class="col-xs-12">
                         <div class="box">
                             <div class="box-header">
-                                <h3 class="box-title">Probes</h3>                                    
+                            	<?php
+                            		$count = getProbesCount();
+                            		if ($count > 500)
+                            			echo "<h3 class=\"box-title\">Showing the last 500 probes</h3>";
+                            		else if ($count > 0)
+                            			echo "<h3 class=\"box-title\">Showing the last " . $count . " probes</h3>";
+                            	?>                                  
                             </div><!-- /.box-header -->
+                            <div class="box-body pad table-responsive">
+								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=settings&action=download&data=probes');">Download all probes (XML)</button>
+							</div> 
                             <?php
                                 if (isset($message) && $message[1] != "")
                                 {
@@ -72,7 +84,7 @@
                                     </thead>
                                     <tbody>
                                         <?php
-                                            $probes = getProbes();
+                                            $probes = getProbes(500);
         
                                             while ($probe = mysql_fetch_array($probes))
                                             {
@@ -179,7 +191,7 @@
                                                 {
                                                     echo $router['ttl'] . " " . $router['address'] . " ";
 
-                                                    $packetmodifications = getPacketModificationsForRoiterID($router['id']);
+                                                    $packetmodifications = getPacketModificationsForRouterID($router['id']);
                                                     while ($packetmodification = mysql_fetch_array($packetmodifications))
                                                     {
                                                         echo $packetmodification['layer'] . "::" . $packetmodification['field'] . " ";
@@ -229,4 +241,16 @@
         }
             
     }
+
+	function showProbesForDestination($destinationID)
+	{
+		$destination = getDestinationForID($destinationID);
+
+		$probes = getProbesForDestination($destination['address']);
+
+		while ($probe = mysql_fetch_array($probes))
+		{
+			showProbeInspector($probe['id']);
+		}
+	}
 ?>

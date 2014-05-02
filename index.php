@@ -3,6 +3,42 @@
 
     include("system/config.php");
 
+
+	$message = array();
+	if (isset($_POST['logIn']))
+	{
+		if ($_POST['logIn'] != "true")
+			$message = array("alert-danger", "Error while logging in.");
+		else
+		{
+			if ($_POST['password'] == "")
+				$message = array("alert-danger", "You have to enter a password.");
+			else
+	        {
+	        	if (!connectUser($_POST['password']))
+	        		$message = array("alert-danger", "Wrong password.");
+	        }
+		}
+	} 
+
+	// Test if user connected
+	if (!isAUserConnected())
+	{
+		include("pages/log.php");
+		showLogMenu($message);
+		return;
+	}
+	// USER DECONECTION
+	if (isset($_GET['disconnect']) && isAUserConnected())
+	{
+		disconnectUser();
+		$message = array("alert-success", "You have been correctly disconnected.");
+		include("pages/log.php");
+		showLogMenu($message);
+
+		return;
+	}
+
     $page = "";
     if (isset($_GET['page']))
         $page = $_GET['page'];
@@ -40,6 +76,8 @@
         <link href="css/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" type="text/css" />
         <!-- Theme style -->
         <link href="css/AdminLTE.css" rel="stylesheet" type="text/css" />
+         <!-- Ion Slider -->
+        <link href="css/ionslider/ion.rangeSlider.css" rel="stylesheet" type="text/css" />
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -47,45 +85,20 @@
           <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
           <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
+
+		<!-- CUSTOM JS -->
+		<script type="text/javascript">
+			function confirmAndGo(text, destination)
+			{
+				var c = confirm(text);
+				if (c == true)
+				{
+					window.location.assign(destination);
+				}
+			}
+		</script>
     </head>
 
-	<?php
-
-		$message = array();
-		if (isset($_POST['logIn']))
-		{
-			if ($_POST['logIn'] != "true")
-				$message = array("alert-danger", "Error while logging in.");
-			else
-			{
-				if ($_POST['password'] == "")
-					$message = array("alert-danger", "You have to enter a password.");
-				else
-		        {
-		        	if (!connectUser($_POST['password']))
-		        		$message = array("alert-danger", "Wrong password.");
-		        }
-			}
-		} 
-
-		// Test if user connected
-		if (!isAUserConnected())
-		{
-			include("pages/log.php");
-			showLogMenu($message);
-			return;
-		}
-		// USER DECONECTION
-		if (isset($_GET['disconnect']) && isAUserConnected())
-		{
-			disconnectUser();
-			$message = array("alert-success", "You have been correctly disconnected.");
-			include("pages/log.php");
-			showLogMenu($message);
-
-			return;
-		}
-	?>
 	
     <body class="skin-blue">
         <!-- header logo: style can be found in header.less -->
@@ -139,14 +152,11 @@
                                 <span>Dashboard</span>
                             </a>
                         </li>
-                        <li class="treeview <?php showActivePageOrNot($page, "probes"); ?>">
-                            <a href="#">
+                        <li class="<?php showActivePageOrNot($page, "probes"); ?>">
+                            <a href="index.php?page=probes">
                                 <span>Probes</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
-                            <ul class="treeview-menu">
-                                <li><a href="index.php?page=probes"><i class="fa fa-angle-double-right"></i> List</a></li>
-                            </ul>
                         </li>
                         <li class="treeview <?php showActivePageOrNot($page, "destinations"); ?>">
                             <a href="#">
@@ -158,9 +168,9 @@
                                 <li><a href="index.php?page=destinations&action=add"><i class="fa fa-angle-double-right"></i> Add new</a></li>
                             </ul>
                         </li>
-                        <li class="<?php showActivePageOrNot($page, "contact"); ?>" >
-                            <a href="index.php?page=contact">
-                                <span>Contact</span>
+                        <li class="<?php showActivePageOrNot($page, "settings"); ?>" >
+                            <a href="index.php?page=settings">
+                                <span>Settings</span>
                             </a>
                         </li>
                         <li class="<?php showActivePageOrNot($page, "about"); ?>" >
@@ -185,8 +195,8 @@
                     case "destinations":
                         include("pages/destinations.php");
                         break;
-                    case "contact":
-                        include("pages/contact.php");
+                    case "settings":
+                        include("pages/settings.php");
                         break;
                     case "about":
                         include("pages/about.php");
@@ -230,12 +240,12 @@
         <script src="js/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js" type="text/javascript"></script>
         <!-- iCheck -->
         <script src="js/plugins/iCheck/icheck.min.js" type="text/javascript"></script>
-
         <!-- AdminLTE App -->
         <script src="js/AdminLTE/app.js" type="text/javascript"></script>
-        
         <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-        <script src="js/AdminLTE/dashboard.js" type="text/javascript"></script>        
+        <script src="js/AdminLTE/dashboard.js" type="text/javascript"></script>
+		<!-- Ion Slider -->
+        <script src="js/plugins/ionslider/ion.rangeSlider.min.js" type="text/javascript"></script>
 
     </body>
 </html>

@@ -39,4 +39,18 @@
 			return false;
 	}
 
+	function setPassword($oldpassword, $newpassword)
+	{
+		$result = mysql_query("SELECT password FROM android_tracebox_settings WHERE id=1") or die(mysql_error());
+		$pass = mysql_fetch_array($result);
+
+		if (hash('sha512', $oldpassword) == $pass["password"])
+		{
+			$newHash = hash('sha512', $newpassword);
+			return mysql_query("UPDATE android_tracebox_settings SET password='$newHash' WHERE id=1") or die(mysql_error());
+			
+		}
+		return false;
+	}
+
 ?>

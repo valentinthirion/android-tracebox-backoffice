@@ -33,6 +33,53 @@
 
         return mysql_fetch_array($d);
     }
+
+	function getDestinationForID($ID)
+    {
+        $ID = mysql_real_escape_string(htmlspecialchars($ID));
+
+        $d = mysql_query("SELECT * FROM android_tracebox_destinations WHERE id='$ID'") or die (mysql_error());
+
+        return mysql_fetch_array($d);
+    }
+
+	function deleteAllDestinations()
+	{
+		return mysql_query("DELETE FROM android_tracebox_destinations") or die (mysql_error());
+	}
+
+	function createCSVWithAllDestinations()
+	{
+		$text = "";
+		$destinations = getDestinations();
+		while ($d = mysql_fetch_array($destinations))
+		{
+			$text .= $d['address'] . "," . $d['name'] . "\n";
+		}
+
+		$file = fopen("./destinations.csv", "w");
+		fwrite($file, $text);
+		fclose($file);
+	}
+
+	function createXMLWithAllDestinations()
+	{
+		$text = "";//"Content-type: text/xml";
+		$text .= "<xml version='1.0' encoding='UTF-8'>";
+		$text .= "<destinations>";
+		
+		$destinations = getDestinations();
+		while ($d = mysql_fetch_array($destinations))
+		{
+			$text .= "<destination name=\"" . $d['name'] . "\" address=\"" . $d['address'] . "\"/>";
+		}
+		$text .= "</destinations>";
+		$text .= "</xml>";
+
+		$file = fopen("./destinations.xml", "w");
+		fwrite($file, $text);
+		fclose($file);
+	}
 	
 
 ?>

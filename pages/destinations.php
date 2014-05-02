@@ -47,6 +47,10 @@
                             <div class="box-header">
                                 <h3 class="box-title">Destinations</h3>                                    
                             </div><!-- /.box-header -->
+                            <div class="box-body pad table-responsive">
+								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=settings&action=download&data=destinations&format=CSV');">Download all destinations (CSV)</button>
+								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=settings&action=download&data=destinations&format=XML');">Download all destinations (XML)</button>
+                            </div>
                             <?php
                                 if (isset($message) && $message[1] != "")
                                 {

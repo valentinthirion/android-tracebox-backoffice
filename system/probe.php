@@ -11,9 +11,9 @@
 		return mysql_insert_id();
 	}
 
-    function getProbes()
+    function getProbes($max)
     {
-        $d = mysql_query("SELECT * FROM android_tracebox_probes ORDER BY starttime DESC") or die (mysql_error());
+        $d = mysql_query("SELECT * FROM android_tracebox_probes ORDER BY starttime DESC LIMIT 0, $max") or die (mysql_error());
 
         return $d;
     }
@@ -34,6 +34,62 @@
             return false;
 
         return mysql_query("DELETE FROM android_tracebox_probes WHERE id=$id") or die (mysql_error());
+	}
+
+	 function getProbesForDestination($IP)
+    {
+        $IP = mysql_real_escape_string(htmlspecialchars($IP));
+
+        $d = mysql_query("SELECT * FROM android_tracebox_probes WHERE destination='$IP'") or die (mysql_error());
+
+        return $d;
+    }
+
+	function deleteAllProbes()
+	{
+		return mysql_query("DELETE FROM android_tracebox_probes") or die (mysql_error());
+	}
+
+	function getProbesCount()
+    {
+        $d = mysql_query("SELECT COUNT(*) as count FROM android_tracebox_probes") or die (mysql_error());
+        $d = mysql_fetch_array($d);
+
+        return $d['count'];
+    }
+
+	function createXMLWithProbes()
+	{
+		$text = "";
+		$text .= "<xml version='1.0' encoding='UTF-8'>";
+		$text .= "<probes>";
+		
+		$probes = getProbes(getProbesCount());
+		while ($p = mysql_fetch_array($probes))
+		{
+			$text .= "<probe address=\"" . $p['address'] . "\" starttime=\"" . $p['starttime'] . "\" endtime=\"" . $p['endtime'] . "\" connectivityMode=\"" . $p['connectivityMode'] . "\" location=\"" . $p['location'] . "\" >";
+			$routers = getRoutersForProbeID($p['id']);
+			while ($router = mysql_fetch_array($routers))
+			{
+				$text .= "<router address=\"" . $router['address'] . "\" ttl=\"" . $router['ttl'] . "\">";
+				$modifications = getPacketModificationsForRouterID($router['id']);
+				while ($m = mysql_fetch_array($modifications))
+				{
+					$text .= "<packetmodification layer=\"" . $m['layer'] . "\" field=\"" . $m['field'] . "\" />";
+				}
+				$text .= "</router>";
+			}
+
+			$text .= "</probe>";
+			
+		}
+
+		$text .= "</probes>";
+		$text .= "</xml>";
+
+		$file = fopen("./probes.xml", "w");
+		fwrite($file, $text);
+		fclose($file);
 	}
 
 ?>
