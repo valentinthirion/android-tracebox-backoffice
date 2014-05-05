@@ -1,6 +1,7 @@
 <?php
 
 	include_once("../system/config.php");
+	connectMysql();
 
 	// Test the input
 	if (isset($_POST['probeData']))

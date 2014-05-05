@@ -1,38 +1,54 @@
 <?php
 
-	connectDatabase();
+	function getDatabaseSettings()
+	{
+		if (file_exists("system_config.ini"))
+		{
+			$ini_array = parse_ini_file("system_config.ini");
+			return $ini_array;
+		}
+		$ini_array = parse_ini_file("../system_config.ini");
+		return $ini_array;
+	}
 
 	function connectMysql()
 	{
-	   /* DEV SERVER
-	  MySQL: 
-	  Serveur        : 
-	  Utilisateur    : 
-	  Nom de la base : 
-	  Mot de passe   : 
-	   */
-
-	   $serveur_sql = 'mysql51-30.perso';
-	   $sql_user = 'medineodatab';
-	   $sql_pass= '8rKm3Smf';
+	   $databaseSettings = getDatabaseSettings();
 	   
 		/* Connexion SQL */
-		mysql_connect($serveur_sql, $sql_user, $sql_pass);
+		if (($databaseSettings['sql_server'] != "") && ($databaseSettings['sql_username'] != "") && ($databaseSettings['sql_pass'] != "") && ($databaseSettings['sql_database'] != ""))
+			return mysql_connect($databaseSettings['sql_server'], $databaseSettings['sql_username'], $databaseSettings['sql_pass']) && mysql_select_db($databaseSettings['sql_database']);
+		else
+			return false;
 	}
 
-	/*
-		This functions will connect to the database
-	
-		It returns true if no problem occured
-		Else it returns false
-	*/
-	function connectDatabase()
+	function setDatabaseSettings($server, $database, $user, $pass, $prefix)
 	{
-		connectMysql();
-		$databaseName = "medineodatab";
+		//$serveur_sql = 'mysql51-30.perso';
+		 // db = 'medineodatab'
+		//$sql_user = 'medineodatab';
+		//$sql_pass= '8rKm3Smf';
 
-		return mysql_select_db($databaseName);
-	}
+		$server = htmlspecialchars($server);
+		$database = htmlspecialchars($database);
+		$user = htmlspecialchars($user);
+		$pass = htmlspecialchars($pass);
+		$prefix = htmlspecialchars($prefix);
+
+		$text = "";
+		$text .= "sql_server='" . $server . "'\n";
+		$text .= "sql_database='" . $database . "'\n";
+		$text .= "sql_username='" . $user . "'\n";
+		$text .= "sql_pass='" . $pass . "'\n";
+		$text .= "sql_prefix='" . $prefix . "'\n";
+		
+
+		$file = fopen("system_config.ini", "w");
+		fwrite($file, $text);
+		fclose($file);
+
+		return true;
+	}	
 
 	
 

@@ -1,10 +1,42 @@
 <?php
 	session_start();
 
+	error_reporting(E_ERROR | E_PARSE);
+
     include("system/config.php");
+    $message = array();
 
+	// If just tried to install
+	if ((isset($_POST['installBackoffice'])) && ($_POST['installBackoffice'] == "true"))
+	{
+		if (($_POST['server'] != "") && ($_POST['database'] != "") && ($_POST['username'] != "") && ($_POST['password'] != "") && ($_POST['tableprefix'] != "") && ($_POST['connection_password'] != ""))
+		{
+			if (setDatabaseSettings($_POST['server'], $_POST['database'], $_POST['username'], $_POST['password'], $_POST['tableprefix']))
+			{
+				if (connectMysql())
+				{
+					if (createTablesForSystem($_POST['tableprefix'], $_POST['connection_password'])) // CREATE TABLES
+						$message = array("alert-success", "The database settings have been updated");
+					else
+						$message = array("alert-danger", "There was an error while creating the database and saving the settings");
+				}
+				else
+				$message = array("alert-danger", "The system could not connect to the database.");
+			}
+		}
+		else
+			$message = array("alert-danger", "The given database settings are not valid.");
+	}
 
-	$message = array();
+	// Test if system installed
+	if (!connectMysql())
+	{
+		include("pages/install.php");
+		showInstallationPage($message);
+		return;
+	}
+
+	
 	if (isset($_POST['logIn']))
 	{
 		if ($_POST['logIn'] != "true")
@@ -97,6 +129,11 @@
 				}
 			}
 		</script>
+
+		<!-- FAVICON -->
+		<link rel="icon" type="image/png" href="img/favicon/favicon-32.png">
+		<!-- Shortcut links -->
+		<link rel="shortcut icon" href="img/favicon/favicon-128.png" />
     </head>
 
 	
@@ -105,6 +142,7 @@
         <header class="header">
             <a href="index.php" class="logo">
                 <!-- Add the class icon to your logo image or logo icon to add the margining -->
+                <img src="img/favicon/favicon-48.png" width="40px" />
                 Android Tracebox
             </a>
             <!-- Header Navbar: style can be found in header.less -->

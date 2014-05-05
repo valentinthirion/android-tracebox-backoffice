@@ -28,7 +28,11 @@
 			    <body class="bg-black">
 			
 			        <div class="form-box" id="login-box">
-			            <div class="header">Log in to Android Tracebox Backoffice</div>
+			            <div class="header">
+			            	Log in to Android Tracebox Backoffice
+			            	<br />
+			            	<img src="img/favicon/favicon-128.png" width="150px" />
+			            </div>
 			            <form action="index.php" method="post">
 			                <div class="body bg-gray">
 			                	<?php
@@ -43,7 +47,7 @@
                                         }
                                  ?>
 			                    <div class="form-group">
-			                        <input type="password" name="password" class="form-control" placeholder="Password"/>
+			                        <input type="password" name="password" class="form-control" placeholder="Password" autofocus/>
 			                        <input type="hidden" name="logIn" value="true" />
 			                    </div>          
 			                </div>

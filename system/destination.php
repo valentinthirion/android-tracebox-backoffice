@@ -4,14 +4,14 @@
         $name = mysql_real_escape_string(htmlspecialchars($name));
 		$address = mysql_real_escape_string(htmlspecialchars($address));
 
-		return mysql_query("INSERT INTO android_tracebox_destinations 	(name, address)
+		return mysql_query("INSERT INTO " . DB_PREFIX . "destinations 	(name, address)
 															    VALUES 	('$name', '$address')")
                                                                 or die (mysql_error());	
 	}
 
     function getDestinations()
     {
-        $d = mysql_query("SELECT * FROM android_tracebox_destinations") or die (mysql_error());
+        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "destinations") or die (mysql_error());
 
         return $d;
     }
@@ -22,14 +22,14 @@
         if (!is_numeric($id))
             return false;
 
-        return mysql_query("DELETE FROM android_tracebox_destinations WHERE id=$id") or die (mysql_error());
+        return mysql_query("DELETE FROM " . DB_PREFIX . "destinations WHERE id=$id") or die (mysql_error());
 	}
 
     function getDestinationForIP($IP)
     {
         $IP = mysql_real_escape_string(htmlspecialchars($IP));
 
-        $d = mysql_query("SELECT * FROM android_tracebox_destinations WHERE address='$IP'") or die (mysql_error());
+        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "destinations WHERE address='$IP'") or die (mysql_error());
 
         return mysql_fetch_array($d);
     }
@@ -38,14 +38,14 @@
     {
         $ID = mysql_real_escape_string(htmlspecialchars($ID));
 
-        $d = mysql_query("SELECT * FROM android_tracebox_destinations WHERE id='$ID'") or die (mysql_error());
+        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "destinations WHERE id='$ID'") or die (mysql_error());
 
         return mysql_fetch_array($d);
     }
 
 	function deleteAllDestinations()
 	{
-		return mysql_query("DELETE FROM android_tracebox_destinations") or die (mysql_error());
+		return mysql_query("DELETE FROM " . DB_PREFIX . "destinations") or die (mysql_error());
 	}
 
 	function createCSVWithAllDestinations()

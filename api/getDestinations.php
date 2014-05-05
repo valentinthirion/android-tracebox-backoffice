@@ -1,6 +1,7 @@
 <?php
 
 	include_once("../system/config.php");
+	connectMysql();
 
 	$result = mysql_query("SELECT * FROM android_tracebox_destinations ORDER BY id") or die (mysql_error());
 

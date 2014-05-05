@@ -9,7 +9,7 @@
 		}
 		else
 		{
-			$result = mysql_query("SELECT password FROM android_tracebox_settings WHERE id=1") or die(mysql_error());
+			$result = mysql_query("SELECT password FROM " . DB_PREFIX . "settings WHERE id=1") or die(mysql_error());
 			if (mysql_num_rows($result) > 0)
 			{
 				$pass = mysql_fetch_array($result);
@@ -41,13 +41,13 @@
 
 	function setPassword($oldpassword, $newpassword)
 	{
-		$result = mysql_query("SELECT password FROM android_tracebox_settings WHERE id=1") or die(mysql_error());
+		$result = mysql_query("SELECT password FROM " . DB_PREFIX . "settings WHERE id=1") or die(mysql_error());
 		$pass = mysql_fetch_array($result);
 
 		if (hash('sha512', $oldpassword) == $pass["password"])
 		{
 			$newHash = hash('sha512', $newpassword);
-			return mysql_query("UPDATE android_tracebox_settings SET password='$newHash' WHERE id=1") or die(mysql_error());
+			return mysql_query("UPDATE " . DB_PREFIX . "settings SET password='$newHash' WHERE id=1") or die(mysql_error());
 			
 		}
 		return false;

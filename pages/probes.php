@@ -101,14 +101,14 @@
                                                             <?php
                                                                 if ($probe['connectivityMode'] == 1)
                                                                     echo "WIFI";
-                                                                elseif ($probe['connectivityMode'] == 2)
+                                                                elseif ($probe['connectivityMode'] == 0)
                                                                     echo "CELLULAR";
                                                                 else
                                                                     echo $probe['connectivityMode'];
                                                             ?>
                                                         </td>
-                                                        <td><?php echo getRoutersCountForProbeID($probe['id']); ?></td>
-                                                        <td>0</td>
+                                                        <td><?php //echo getRoutersCountForProbeID($probe['id']); ?></td>
+                                                        <td><?php //echo getPacketModificationsCounteForProbeID($probe['id']); ?></td>
                                                         <td>
                                                             <a href="index.php?page=probes&action=inspect&id=<?php echo $probe['id']; ?>"><i class="fa fa-fw fa-eye"></i></a>
                                                             <a href="index.php?page=probes&action=delete&id=<?php echo $probe['id']; ?>"><i class="fa fa-fw fa-ban"></i></a>
@@ -213,10 +213,7 @@
 
                                     <h4>Export</h4>
                                     <div class="form-group">
-                                        <select class="form-control">
-                                            <option>XML</option>
-                                            <option>CSV</option>
-                                         </select>
+                                        <!--<button class="btn btn-primary" onclick="window.location.assign('index.php?page=settings&action=download&data=probes');">Download all probes (XML)</button>-->
                                     </div>
                                 </div><!-- /.box-body -->
 

@@ -4,7 +4,7 @@
 	{
 		$starttime = time();
 		$endtime = time();
-		mysql_query("INSERT INTO android_tracebox_probes 	(destination, starttime, endtime, location, connectivityMode)
+		mysql_query("INSERT INTO " . DB_PREFIX . "probes 	(destination, starttime, endtime, location, connectivityMode)
 															VALUES 	('$destination', $starttime, $endtime, '$location', $connectivity)")
 															or die (mysql_error());															
 
@@ -13,7 +13,7 @@
 
     function getProbes($max)
     {
-        $d = mysql_query("SELECT * FROM android_tracebox_probes ORDER BY starttime DESC LIMIT 0, $max") or die (mysql_error());
+        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "probes ORDER BY starttime DESC LIMIT 0, $max") or die (mysql_error());
 
         return $d;
     }
@@ -22,7 +22,7 @@
     {
         $id = mysql_real_escape_string(htmlspecialchars($id));
 
-        $d = mysql_query("SELECT * FROM android_tracebox_probes WHERE id='$id'") or die (mysql_error());
+        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "probes WHERE id='$id'") or die (mysql_error());
 
         return mysql_fetch_array($d);
     }
@@ -33,26 +33,26 @@
         if (!is_numeric($id))
             return false;
 
-        return mysql_query("DELETE FROM android_tracebox_probes WHERE id=$id") or die (mysql_error());
+        return mysql_query("DELETE FROM " . DB_PREFIX . "probes WHERE id=$id") or die (mysql_error());
 	}
 
 	 function getProbesForDestination($IP)
     {
         $IP = mysql_real_escape_string(htmlspecialchars($IP));
 
-        $d = mysql_query("SELECT * FROM android_tracebox_probes WHERE destination='$IP'") or die (mysql_error());
+        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "probes WHERE destination='$IP'") or die (mysql_error());
 
         return $d;
     }
 
 	function deleteAllProbes()
 	{
-		return mysql_query("DELETE FROM android_tracebox_probes") or die (mysql_error());
+		return mysql_query("DELETE FROM " . DB_PREFIX . "probes") or die (mysql_error());
 	}
 
 	function getProbesCount()
     {
-        $d = mysql_query("SELECT COUNT(*) as count FROM android_tracebox_probes") or die (mysql_error());
+        $d = mysql_query("SELECT COUNT(*) as count FROM " . DB_PREFIX . "probes") or die (mysql_error());
         $d = mysql_fetch_array($d);
 
         return $d['count'];
