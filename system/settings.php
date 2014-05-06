@@ -44,6 +44,8 @@
 														  endtime int(11) NOT NULL,
 														  connectivityMode int(11) NOT NULL,
 														  location text NOT NULL,
+														  carrierName text NOT NULL,
+														  carrierType text NOT NULL,
 														  PRIMARY KEY (id)
 														) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"))
 														 return false;

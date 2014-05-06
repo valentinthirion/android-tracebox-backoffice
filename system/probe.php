@@ -1,11 +1,11 @@
 <?php
 
-	function addNewProbe($destination, $starttime, $endtime, $connectivity, $location)
+	function addNewProbe($destination, $starttime, $endtime, $connectivity, $location, $carrierName, $carrierType)
 	{
 		$starttime = time();
 		$endtime = time();
-		mysql_query("INSERT INTO " . DB_PREFIX . "probes 	(destination, starttime, endtime, location, connectivityMode)
-															VALUES 	('$destination', $starttime, $endtime, '$location', $connectivity)")
+		mysql_query("INSERT INTO " . DB_PREFIX . "probes 	(destination, starttime, endtime, location, connectivityMode, carrierName, carrierType)
+															VALUES 	('$destination', $starttime, $endtime, '$location', $connectivity, '$carrierName', '$carrierType')")
 															or die (mysql_error());															
 
 		return mysql_insert_id();
@@ -67,7 +67,12 @@
 		$probes = getProbes(getProbesCount());
 		while ($p = mysql_fetch_array($probes))
 		{
-			$text .= "<probe address=\"" . $p['address'] . "\" starttime=\"" . $p['starttime'] . "\" endtime=\"" . $p['endtime'] . "\" connectivityMode=\"" . $p['connectivityMode'] . "\" location=\"" . $p['location'] . "\" >";
+			$text .= "<probe address=\"" . $p['address']. "\" "
+			. "starttime=\"" . $p['starttime'] . "\" endtime=\"" . $p['endtime'] . "\" "
+			. "connectivityMode=\"" . $p['connectivityMode'] . "\" "
+			. "carrierName=\"" . $p['carrierName'] . "\" " . "carrierType=\"" . $p['carrierType'] . "\" "
+			. "location=\"" . $p['location'] . "\" >";
+
 			$routers = getRoutersForProbeID($p['id']);
 			while ($router = mysql_fetch_array($routers))
 			{

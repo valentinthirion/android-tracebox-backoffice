@@ -96,13 +96,17 @@
                                                     <tr>
                                                         <td><?php echo date("d/m/Y H:i", $probe['starttime']); ?></td>
                                                         <td><a href="index.php?page=probes&action=probes_for_destination&destination_id=<?php echo $destination['address']; ?>"><?php echo $destination; ?></a></td>
-                                                        <td><?php echo $probe['location']; ?></td>
+                                                        <td>
+                                                        	<?php $loc = split("/", $probe['location']); echo number_format($loc[0], 4) . "/" . number_format($loc[1], 4); ?>
+                                                        </td>
                                                         <td>
                                                             <?php
                                                                 if ($probe['connectivityMode'] == 1)
                                                                     echo "WIFI";
                                                                 elseif ($probe['connectivityMode'] == 0)
-                                                                    echo "CELLULAR";
+                                                                {
+                                                                    echo $probe['carrierType'] . " (" . $probe['carrierName'] . ")";
+                                                                }
                                                                 else
                                                                     echo $probe['connectivityMode'];
                                                             ?>
