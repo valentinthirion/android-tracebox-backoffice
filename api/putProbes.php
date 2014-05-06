@@ -12,6 +12,12 @@
 		fwrite($fp, $data);
 		fclose($fp);
 
+        if (!file_exists("probe.xml"))
+        {
+            echo "-1";
+            return 0;
+        }
+
 		// Parse the XML
 		$xml = simplexml_load_file("probe.xml");
 	    foreach ($xml as $probe)
