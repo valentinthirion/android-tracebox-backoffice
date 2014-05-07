@@ -37,8 +37,17 @@
         return $d;
     }
 
-	function getPacketModificationsCounteForProbeID($id)
+	function getPacketModificationsCountForProbeID($id)
 	{
+		$d = mysql_query("SELECT COUNT(*) as count
+							FROM " . DB_PREFIX . "routers
+							INNER JOIN " . DB_PREFIX . "packetmodifications
+							ON " . DB_PREFIX . "routers.id=" . DB_PREFIX . "packetmodifications.router_id
+							WHERE " . DB_PREFIX . "routers.probe_id=$id") or die (mysql_error());
+
+		$c = mysql_fetch_array($d);
+		return $c['count'];
+
 		$count = 0;
 		$routers = getRoutersForProbeID($id);
 

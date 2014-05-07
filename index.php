@@ -224,8 +224,8 @@
                                 <span>Settings</span>
                             </a>
                         </li>
-                        <li class="<?php showActivePageOrNot($page, "about"); ?>" >
-                            <a href="index.php?page=about">
+                        <li class="" >
+                            <a href="http://www.androidtracebox.org" target="_blank">
                                 <span>About</span>
                             </a>
                         </li>
@@ -248,9 +248,6 @@
                         break;
                     case "settings":
                         include("pages/settings.php");
-                        break;
-                    case "about":
-                        include("pages/about.php");
                         break;
                     case "log":
                     	include("pages/log.php");

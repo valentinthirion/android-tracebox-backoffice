@@ -62,9 +62,9 @@
                             	<?php
                             		$count = getProbesCount();
                             		if ($count > 500)
-                            			echo "<h3 class=\"box-title\">Showing the last 500 probes</h3>";
+                            			echo "<h3 class=\"box-title\">Showing the last non-null 500 probes</h3>";
                             		else if ($count > 0)
-                            			echo "<h3 class=\"box-title\">Showing the last " . $count . " probes</h3>";
+                            			echo "<h3 class=\"box-title\">Showing the last non-null among " . $count . " probes</h3>";
                             	?>                                  
                             </div><!-- /.box-header -->
                             <div class="box-body pad table-responsive">
@@ -105,6 +105,12 @@
                                                 $destination = $d['name'];
                                                 if ($destination == null)
                                                     $destination = $probe['destination'];
+
+												$nbOfRouters = getRoutersCountForProbeID($probe['id']);
+												if ($nbOfRouters == 0)
+													continue;
+
+												$nbOfModif = getPacketModificationsCountForProbeID($probe['id']);
                                                 ?>
                                                     <tr>
                                                         <td><?php echo date("d/m/Y H:i", $probe['starttime']); ?></td>
@@ -124,8 +130,8 @@
                                                                     echo $probe['connectivityMode'];
                                                             ?>
                                                         </td>
-                                                        <td><?php //echo getRoutersCountForProbeID($probe['id']); ?></td>
-                                                        <td><?php //echo getPacketModificationsCounteForProbeID($probe['id']); ?></td>
+                                                        <td><?php echo $nbOfRouters ?></td>
+                                                        <td><?php echo $nbOfModif ?></td>
                                                         <td>
                                                             <a href="index.php?page=probes&action=inspect&id=<?php echo $probe['id']; ?>"><i class="fa fa-fw fa-eye"></i></a>
                                                             <a href="index.php?page=probes&action=delete&id=<?php echo $probe['id']; ?>"><i class="fa fa-fw fa-ban"></i></a>
