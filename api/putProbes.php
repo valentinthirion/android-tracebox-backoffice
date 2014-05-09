@@ -36,7 +36,7 @@
 	    {
 	    	// New Probe
 			// Instert the probe in database
-			$probe_id = addNewProbe($probe['address'], $probe['starttime'], $probe['endtime'], $probe['connectivityType'], $probe['location'], $probe['carrierName'], $probe['carrierType']);
+			$probe_id = addNewProbe($probe['address'], $probe['starttime'], $probe['endtime'], $probe['connectivityType'], $probe['location'], $probe['carrierName'], $probe['carrierType'], $probe['BatteryDifference']);
 
 			foreach ($probe as $router)
 			{

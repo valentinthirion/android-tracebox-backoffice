@@ -92,6 +92,7 @@
                                             <th>Connectivity mode</th>
                                             <th># of routers</th>
                                             <th>Modifications</th>
+                                            <th>Battery usage</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -132,6 +133,7 @@
                                                         </td>
                                                         <td><?php echo $nbOfRouters ?></td>
                                                         <td><?php echo $nbOfModif ?></td>
+                                                        <td><?php echo $probe['batteryUsage']; ?>%</td>
                                                         <td>
                                                             <a href="index.php?page=probes&action=inspect&id=<?php echo $probe['id']; ?>"><i class="fa fa-fw fa-eye"></i></a>
                                                             <a href="index.php?page=probes&action=delete&id=<?php echo $probe['id']; ?>"><i class="fa fa-fw fa-ban"></i></a>
@@ -150,6 +152,7 @@
                                             <th>Connectivity mode</th>
                                             <th># of routers</th>
                                             <th>Modifications</th>
+                                            <th>Battery usage</th>
                                             <th>Action</th>
                                         </tr>
                                     </tfoot>

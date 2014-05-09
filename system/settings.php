@@ -58,6 +58,7 @@
 														  location text NOT NULL,
 														  carrierName text NOT NULL,
 														  carrierType text NOT NULL,
+														  batteryUsage DOUBLE NOT NULL
 														  PRIMARY KEY (id)
 														) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"))
 														 return false;

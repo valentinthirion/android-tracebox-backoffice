@@ -12,12 +12,12 @@
 		this project can be found at: www.androidtracebox.com
 	*/
 
-	function addNewProbe($destination, $starttime, $endtime, $connectivity, $location, $carrierName, $carrierType)
+	function addNewProbe($destination, $starttime, $endtime, $connectivity, $location, $carrierName, $carrierType, $batteryUsage)
 	{
 		$starttime = time();
 		$endtime = time();
-		mysql_query("INSERT INTO " . DB_PREFIX . "probes 	(destination, starttime, endtime, location, connectivityMode, carrierName, carrierType)
-															VALUES 	('$destination', $starttime, $endtime, '$location', $connectivity, '$carrierName', '$carrierType')")
+		mysql_query("INSERT INTO " . DB_PREFIX . "probes 	(destination, starttime, endtime, location, connectivityMode, carrierName, carrierType, batteryUsage)
+															VALUES 	('$destination', $starttime, $endtime, '$location', $connectivity, '$carrierName', '$carrierType', $batteryUsage)")
 															or die (mysql_error());															
 
 		return mysql_insert_id();
