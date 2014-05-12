@@ -25,7 +25,11 @@
 
     function getProbes($max)
     {
-        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "probes ORDER BY starttime DESC LIMIT 0, $max") or die (mysql_error());
+    	$d;
+    	if ($max != "")
+	        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "probes ORDER BY starttime DESC LIMIT 0, $max") or die (mysql_error());
+	    else
+	    	$d = mysql_query("SELECT * FROM " . DB_PREFIX . "probes ORDER BY starttime DESC") or die (mysql_error());
 
         return $d;
     }
@@ -69,6 +73,17 @@
 
         return $d['count'];
     }
+
+	function deleteAllEmptyProbes()
+	{
+		$probes = getProbes("");
+		while ($probe = mysql_fetch_array($probes))
+		{
+			$nbOfRouters = getRoutersCountForProbeID($probe['id']);
+			if ($nbOfRouters == 0)
+				deleteProbe($probe['id']);
+		}
+	}
 
 	function createXMLWithProbes()
 	{

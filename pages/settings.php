@@ -20,6 +20,9 @@
 	if (isset($_GET['dropProbes']) && ($_GET['dropProbes'] == "true"))
 		deleteAllProbes();
 
+	if (isset($_GET['dropNullProbes']) && ($_GET['dropNullProbes'] == "true"))
+		deleteAllEmptyProbes();
+
 	if (isset($_GET['dropAll']) && ($_GET['dropAll'] == "true"))
 	{
 		deleteAllDestinations();
@@ -113,6 +116,9 @@
 							<div class="box-body pad table-responsive" onclick="confirmAndGo('Do you really want to drop the complete probe list?\n(this action is irreversible)', 'index.php?page=settings&dropProbes=true');">
 								<button class="btn btn-primary">Drop probes</button>
 							</div>
+							<div class="box-body pad table-responsive" onclick="confirmAndGo('Do you really want to drop all the null probes?\n(this action is irreversible)', 'index.php?page=settings&dropNullProbes=true');">
+								<button class="btn btn-primary">Drop null probes</button>
+							</div>
 							<div class="box-body pad table-responsive" onclick="confirmAndGo('Do you really want to drop the data?\n(this action is irreversible)', 'index.php?page=settings&dropAll=true');">
 								<button class="btn btn-primary">Drop all</button>
 							</div>
@@ -148,19 +154,6 @@
 									<button type="submit" class="btn btn-primary" onclick="this.submit()">Submit</button>
 								</div>
                             </form>
-
-                            <form role="form" action="" method="POST">
-                                <div class="box-body">
-                                	<div class="form-group">
-                                        <label for="address">URL Prefix</label>
-                                        <input name="apiprefix" type="text" class="form-control" id="address" placeholder="" value="<?php echo getAPIPrefix(); ?>" />
-                                    </div>
-                                </div>
-                                <div class="box-footer">
-									<input type="hidden" name="changeAPIPrefix" value="true" />
-									<button type="submit" class="btn btn-primary" onclick="this.submit()">Submit</button>
-								</div>
-							</form>
                         </div>
                     </div>
                     <div class="col-md-4">
