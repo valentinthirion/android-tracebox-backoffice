@@ -62,10 +62,10 @@
                             	<?php
                             		$count = getProbesCount();
                             		if ($count > 500)
-                            			echo "<h3 class=\"box-title\">Showing the last non-null 500 probes</h3>";
+                            			echo "<h3 class=\"box-title\">Showing the last non-null 500 probes (" . $count . " probes)</h3>";
                             		else if ($count > 0)
                             			echo "<h3 class=\"box-title\">Showing the last non-null among " . $count . " probes</h3>";
-                            	?>                                  
+                            	?>
                             </div><!-- /.box-header -->
                             <div class="box-body pad table-responsive">
 								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=settings&action=download&data=probes');">Download all probes (XML)</button>
@@ -124,9 +124,9 @@
                                                                 if ($probe['connectivityMode'] == 1)
                                                                     echo "WIFI";
                                                                 elseif ($probe['connectivityMode'] == 0)
-                                                                {
                                                                     echo $probe['carrierType'] . " (" . $probe['carrierName'] . ")";
-                                                                }
+                                                                elseif ($probe['connectivityMode'] == 7)
+                                                                	echo "BLUETOOTH";
                                                                 else
                                                                     echo $probe['connectivityMode'];
                                                             ?>
