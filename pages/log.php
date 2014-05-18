@@ -45,7 +45,7 @@
 			            	<br />
 			            	<img src="img/favicon/favicon-128.png" width="150px" />
 			            </div>
-			            <form action="index.php" method="post">
+			            <form action="" method="post">
 			                <div class="body bg-gray">
 			                	<?php
                                         if (isset($message) && $message[1] != "")

@@ -31,10 +31,40 @@
 
 	function getPacketModificationsCountForRouterID($id)
 	{
-		$d = mysql_query("SELECT COUNT(*) as count FROM " . DB_PREFIX . "packetmodifications WHERE router_id=$id") or die (mysql_error());
+		$d = mysql_query("  SELECT COUNT(*) as count
+		                    FROM " . DB_PREFIX . "packetmodifications
+		                    WHERE router_id=$id")
+		                    or die (mysql_error());
+
         $d = mysql_fetch_array($d);
 
         return $d['count'];
 	}
+
+    function getPacketModificationsDistribution()
+    {
+        $d = mysql_query("  SELECT layer, field, COUNT(*) as count
+                            FROM " . DB_PREFIX . "packetmodifications
+                            GROUP BY layer, field
+                            ORDER BY layer, count")
+                            or die (mysql_error());
+
+        return $d;
+    }
+
+     function getPacketModificationsDistributionByNetworkMode()
+    {
+        $d = mysql_query("  SELECT connectivityMode, layer, field, COUNT(*) as count
+                            FROM " . DB_PREFIX . "packetmodifications
+                            INNER JOIN " . DB_PREFIX . "routers
+                            ON " . DB_PREFIX . "routers.id=" . DB_PREFIX . "packetmodifications.router_id
+                            INNER JOIN " . DB_PREFIX . "probes
+                            ON " . DB_PREFIX . "probes.id=" . DB_PREFIX . "routers.probe_id
+                            GROUP BY " . DB_PREFIX . "probes.connectivityMode, layer, field
+                            ORDER BY " . DB_PREFIX . "probes.connectivityMode, layer, field")
+                            or die (mysql_error());
+
+        return $d;
+    }
 
 ?>

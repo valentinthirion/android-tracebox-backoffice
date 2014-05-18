@@ -87,6 +87,7 @@
                                     <thead>
                                         <tr>
                                             <th>Date</th>
+                                            <th>Duration</th>
                                             <th>Destination</th>
                                             <th>Location</th>
                                             <th>Connectivity mode</th>
@@ -108,13 +109,12 @@
                                                     $destination = $probe['destination'];
 
 												$nbOfRouters = getRoutersCountForProbeID($probe['id']);
-												//if ($nbOfRouters == 0)
-												//	continue;
 
 												$nbOfModif = getPacketModificationsCountForProbeID($probe['id']);
                                                 ?>
                                                     <tr>
                                                         <td><?php echo date("d/m/Y H:i", $probe['starttime']); ?></td>
+                                                        <td><?php echo ($probe['endtime'] - $probe['starttime']) . "s"; ?></td>
                                                         <td><a href="index.php?page=probes&action=probes_for_destination&destination_id=<?php echo $destination['address']; ?>"><?php echo $probe['destination'] . " (" . $destination . ")"; ?></a></td>
                                                         <td>
                                                         	<?php $loc = split("/", $probe['location']); echo number_format($loc[0], 4) . "/" . number_format($loc[1], 4); ?>
@@ -147,6 +147,7 @@
                                     <tfoot>
                                         <tr>
                                             <th>Date</th>
+                                            <th>Duration</th>
                                             <th>Destination</th>
                                             <th>Location</th>
                                             <th>Connectivity mode</th>

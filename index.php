@@ -219,6 +219,11 @@
                                 <li><a href="index.php?page=destinations&action=add"><i class="fa fa-angle-double-right"></i> Add new</a></li>
                             </ul>
                         </li>
+                         <li class="<?php showActivePageOrNot($page, "export"); ?>" >
+                            <a href="index.php?page=export">
+                                <span>Export</span>
+                            </a>
+                        </li>
                         <li class="<?php showActivePageOrNot($page, "settings"); ?>" >
                             <a href="index.php?page=settings">
                                 <span>Settings</span>
@@ -248,6 +253,9 @@
                         break;
                     case "settings":
                         include("pages/settings.php");
+                        break;
+                    case "export":
+                        include("pages/export.php");
                         break;
                     case "log":
                     	include("pages/log.php");

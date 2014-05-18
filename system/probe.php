@@ -14,8 +14,8 @@
 
 	function addNewProbe($destination, $starttime, $endtime, $connectivity, $location, $carrierName, $carrierType, $batteryUsage)
 	{
-		$starttime = time();
-		$endtime = time();
+		$starttime = strtotime($starttime);
+		$endtime = strtotime($endtime);
 		mysql_query("INSERT INTO " . DB_PREFIX . "probes 	(destination, starttime, endtime, location, connectivityMode, carrierName, carrierType, batteryUsage)
 															VALUES 	('$destination', $starttime, $endtime, '$location', $connectivity, '$carrierName', '$carrierType', $batteryUsage)")
 															or die (mysql_error());															
@@ -123,5 +123,77 @@
 		fwrite($file, $text);
 		fclose($file);
 	}
+
+    function getProbesWithNumberOfHops()
+    {
+        $d = mysql_query("  SELECT destination, connectivityMode, COUNT(*) as nb_of_routers
+                            FROM " . DB_PREFIX . "routers
+                            INNER JOIN " . DB_PREFIX . "probes
+                            ON " . DB_PREFIX . "probes.id=" . DB_PREFIX . "routers.probe_id
+                            GROUP BY " . DB_PREFIX . "routers.probe_id
+                            ORDER BY connectivityMode, " . DB_PREFIX . "probes.starttime")
+                            or die (mysql_error());
+
+        return $d;
+    }
+
+    function getNumberOfProbesWithSameNumberOfRouters()
+    {
+        $d = mysql_query("  SELECT COUNT(" . DB_PREFIX . "routers.id) as nbRouters, connectivityMode, " . DB_PREFIX . "probes.id as id
+                            FROM " . DB_PREFIX . "routers
+                            LEFT JOIN " . DB_PREFIX . "probes
+                            ON " . DB_PREFIX . "probes.id = " . DB_PREFIX . "routers.probe_id
+                            GROUP By " . DB_PREFIX . "probes.id, connectivityMode
+                            ORDER BY connectivityMode
+                        ")
+                        or die (mysql_error());
+        
+        return $d;
+    }
+
+    function getRawProbeResult()
+    {
+        $d = mysql_query("  SELECT
+                                android_tracebox_packetmodifications.layer,
+                                android_tracebox_packetmodifications.field,
+                                android_tracebox_packetmodifications.id as pmID,
+                                r1.rID,
+                                r1.ttl,
+                                r1.address,
+                                r1.destination,
+                                r1.location,
+                                r1.starttime,
+                                r1.endtime,
+                                r1.connectivityMode,
+                                r1.batteryUsage,
+                                r1.carrierType,
+                                r1.carrierName
+                            FROM android_tracebox_packetmodifications
+                            INNER JOIN
+                                (SELECT
+                                    android_tracebox_routers.id as rID,
+                                    android_tracebox_routers.ttl,
+                                    android_tracebox_routers.address,
+                                    android_tracebox_probes.destination,
+                                    android_tracebox_probes.location,
+                                    android_tracebox_probes.starttime,
+                                    android_tracebox_probes.endtime,
+                                    android_tracebox_probes.connectivityMode,
+                                    android_tracebox_probes.batteryUsage,
+                                    android_tracebox_probes.carrierType,
+                                    android_tracebox_probes.carrierName
+                                FROM android_tracebox_routers
+                                INNER JOIN
+                                    android_tracebox_probes
+                                ON
+                                android_tracebox_routers.probe_id=android_tracebox_probes.id)
+                            r1
+                            ON
+                            android_tracebox_packetmodifications.router_id=r1.rID
+                            ")
+                            or die (mysql_error());
+        return $d;
+    }
+
 
 ?>

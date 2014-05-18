@@ -47,18 +47,17 @@
 
 		$c = mysql_fetch_array($d);
 		return $c['count'];
-
-		$count = 0;
-		$routers = getRoutersForProbeID($id);
-
-		while ($r = mysql_fetch_array($routers))
-		{
-			$c = getPacketModificationsCountForRouterID($r['id']);
-			$count += $c;
-		}
-
-		return $c;
-		
 	}
+
+    function getModificationsForProbe($id)
+    {
+        $d = mysql_query("SELECT DISTINCT layer, field
+							FROM " . DB_PREFIX . "packetmodifications
+							INNER JOIN " . DB_PREFIX . "routers
+							ON " . DB_PREFIX . "routers.id=" . DB_PREFIX . "packetmodifications.router_id
+							WHERE " . DB_PREFIX . "routers.probe_id=$id") or die (mysql_error());
+
+        return $data;
+    }
 
 ?>
