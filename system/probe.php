@@ -154,9 +154,38 @@
     function getRawProbeResult()
     {
         $d = mysql_query("  SELECT
-                                android_tracebox_packetmodifications.layer,
-                                android_tracebox_packetmodifications.field,
-                                android_tracebox_packetmodifications.id as pmID,
+                                destination,
+                                location,
+                                starttime,
+                                endtime,
+                                connectivityMode,
+                                batteryUsage,
+                                carrierType,
+                                carrierName,
+                                ttl,
+                                address,
+                                layer,
+                                field
+                            FROM android_tracebox_probes
+                            RIGHT JOIN
+                                (SELECT
+                                    android_tracebox_routers.probe_id as pID,
+                                    ttl,
+                                    address,
+                                    layer,
+                                    field                            
+                                FROM android_tracebox_packetmodifications
+                                INNER JOIN android_tracebox_routers
+                                ON android_tracebox_routers.id= android_tracebox_packetmodifications.router_id
+                                ) r1
+                            ON
+                            android_tracebox_probes.id = r1.pID")
+                            or die (mysql_error());
+		
+        /*$d = mysql_query("  SELECT
+                                " . DB_PREFIX . "packetmodifications.layer,
+                                " . DB_PREFIX . "packetmodifications.field,
+                                " . DB_PREFIX . "packetmodifications.id as pmID,
                                 r1.rID,
                                 r1.ttl,
                                 r1.address,
@@ -168,30 +197,31 @@
                                 r1.batteryUsage,
                                 r1.carrierType,
                                 r1.carrierName
-                            FROM android_tracebox_packetmodifications
+                            FROM " . DB_PREFIX . "packetmodifications
                             INNER JOIN
                                 (SELECT
-                                    android_tracebox_routers.id as rID,
-                                    android_tracebox_routers.ttl,
-                                    android_tracebox_routers.address,
-                                    android_tracebox_probes.destination,
-                                    android_tracebox_probes.location,
-                                    android_tracebox_probes.starttime,
-                                    android_tracebox_probes.endtime,
-                                    android_tracebox_probes.connectivityMode,
-                                    android_tracebox_probes.batteryUsage,
-                                    android_tracebox_probes.carrierType,
-                                    android_tracebox_probes.carrierName
-                                FROM android_tracebox_routers
+                                    " . DB_PREFIX . "routers.id as rID,
+                                    " . DB_PREFIX . "routers.ttl,
+                                    " . DB_PREFIX . "routers.address,
+                                    " . DB_PREFIX . "probes.destination,
+                                    " . DB_PREFIX . "probes.location,
+                                    " . DB_PREFIX . "probes.starttime,
+                                    " . DB_PREFIX . "probes.endtime,
+                                    " . DB_PREFIX . "probes.connectivityMode,
+                                    " . DB_PREFIX . "probes.batteryUsage,
+                                    " . DB_PREFIX . "probes.carrierType,
+                                    " . DB_PREFIX . "probes.carrierName
+                                FROM " . DB_PREFIX . "routers
                                 INNER JOIN
-                                    android_tracebox_probes
+                                    " . DB_PREFIX . "probes
                                 ON
-                                android_tracebox_routers.probe_id=android_tracebox_probes.id)
+                                " . DB_PREFIX . "routers.probe_id=" . DB_PREFIX . "probes.id)
                             r1
                             ON
-                            android_tracebox_packetmodifications.router_id=r1.rID
+                            " . DB_PREFIX . "packetmodifications.router_id=r1.rID
                             ")
                             or die (mysql_error());
+        */
         return $d;
     }
 

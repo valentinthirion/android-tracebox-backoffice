@@ -92,12 +92,12 @@
                                             }
                                             break;
                                         case 5:
-                                            $exportText = "pmID, connectivityMode, field, rID, ttl, address, destination, location, starttime, endtime, connectivityMode, carrierType, carrierName, batteryUsage\n";
+                                            $exportText = "layer, field, ttl, address, destination, location, starttime, endtime, connectivityMode, carrierType, carrierName, batteryUsage\n";
                                             $data = getRawProbeResult();
                                             $nb = mysql_num_rows($data);
                                             while ($m = mysql_fetch_array($data))
                                             {
-                                                $exportText .= $m['pmID'] . ", " . $m['layer'] . ", " . $m['field'] . ", " . $m['rID'] . ", " . $m['ttl'] . ", " . $m['address'] . ", " . $m['destination'] . ", " . $m['location'] . ", " . $m['starttime'] . ", " . $m['endtime'] . ", " . $m['connectivityMode'] . ", " . $m['carrierType'] . ", " . $m['carrierName'] . ", " . $m['batteryUsage'] . "\n";
+                                                $exportText .= $m['layer'] . ", " . $m['field'] . ", " . $m['ttl'] . ", " . $m['address'] . ", " . $m['destination'] . ", " . $m['location'] . ", " . $m['starttime'] . ", " . $m['endtime'] . ", " . $m['connectivityMode'] . ", " . $m['carrierType'] . ", " . $m['carrierName'] . ", " . $m['batteryUsage'] . "\n";
                                             }
                                             break;
                                             
