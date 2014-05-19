@@ -14,12 +14,12 @@
 
 	function getDatabaseSettings()
 	{
-		if (file_exists("system_config.ini"))
+		if (file_exists("system_config.php"))
 		{
-			$ini_array = parse_ini_file("system_config.ini");
+			$ini_array = parse_ini_file("system_config.php");
 			return $ini_array;
 		}
-		$ini_array = parse_ini_file("../system_config.ini");
+		$ini_array = parse_ini_file("../system_config.php");
 		return $ini_array;
 	}
 
@@ -50,7 +50,7 @@
 		$text .= "sql_prefix='" . $prefix . "'\n";
 		
 
-		$file = fopen("system_config.ini", "w");
+		$file = fopen("system_config.php", "w");
 		fwrite($file, $text);
 		fclose($file);
 
