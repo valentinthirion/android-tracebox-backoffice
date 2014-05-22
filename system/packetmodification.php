@@ -14,32 +14,50 @@
 
 	function addNewPacketModification($router_id, $layer, $field)
 	{
-		
-		mysql_query("INSERT INTO " . DB_PREFIX . "packetmodifications (router_id, layer, field)
-										VALUES ($router_id, '$layer', '$field')")
-										or die (mysql_error());
+		if ($layer == "IP")
+		{
+    		if (($field == "TTL") || ($field == "Checksum"))
+    		    return;
+		}
+
+		mysql_query("	INSERT
+						INTO " . DB_PREFIX . "packetmodifications
+						(router_id, layer, field)
+						VALUES ($router_id, '$layer', '$field')")
+						or die (mysql_error());
 
 		return mysql_insert_id();
 	}
 
     function getPacketModificationsForRouterID($id)
     {
-        $d = mysql_query("SELECT * FROM " . DB_PREFIX . "packetmodifications WHERE router_id='$id'") or die (mysql_error());
+        $d = mysql_query("	SELECT *
+        					FROM " . DB_PREFIX . "packetmodifications
+        					WHERE router_id='$id'")
+        					or die (mysql_error());
 
         return $d;
     }
 
-	function getPacketModificationsCountForRouterID($id)
+	function getPacketModificationsCountForRouterID($id, $noIPcS)
 	{
-		$d = mysql_query("  SELECT COUNT(*) as count
-		                    FROM " . DB_PREFIX . "packetmodifications
-		                    WHERE router_id=$id")
-		                    or die (mysql_error());
+		$d;
+		if (!$noIPcS)
+			$d = mysql_query("  SELECT COUNT(*) as count
+		                   		FROM " . DB_PREFIX . "packetmodifications
+						   		WHERE router_id=$id")
+						   		or die (mysql_error());
+		else
+			$d = mysql_query("  SELECT COUNT(*) as count
+		                   		FROM " . DB_PREFIX . "packetmodifications
+						   		WHERE router_id=$id and (layer!='IP' and field!='Checksum')")
+						   		or die (mysql_error());
 
         $d = mysql_fetch_array($d);
 
         return $d['count'];
 	}
+
 
     function getPacketModificationsDistribution()
     {
@@ -53,7 +71,7 @@
     }
 
      function getPacketModificationsDistributionByNetworkMode()
-    {
+     {
         $d = mysql_query("  SELECT connectivityMode, layer, field, COUNT(*) as count
                             FROM " . DB_PREFIX . "packetmodifications
                             INNER JOIN " . DB_PREFIX . "routers

@@ -110,7 +110,7 @@
 
 												$nbOfRouters = getRoutersCountForProbeID($probe['id']);
 
-												$nbOfModif = getPacketModificationsCountForProbeID($probe['id']);
+												$nbOfModif = getPacketModificationsCountForProbeID($probe['id'], false);
                                                 ?>
                                                     <tr>
                                                         <td><?php echo date("d/m/Y H:i", $probe['starttime']); ?></td>
@@ -204,6 +204,22 @@
                                     <h3 class="box-title"><?php echo $destination . " - " . date("d/m/Y H:i", $probe['starttime']); ?></h3>
                                 </div><!-- /.box-header -->
                                 <div class="box-body">
+                                    <h4>Informations</h4>
+                                    <p>
+                                        <ul>
+                                            <li>Connection mode:
+                                                <?php
+                                                    if ($probe['connectivityMode'] == 1)
+                                                        echo "WIFI";
+                                                    elseif ($probe['connectivityMode'] == 0)
+                                                        echo $probe['carrierType'] . " (" . $probe['carrierName'] . ")";
+                                                ?>
+                                            </li>
+                                            <li>Duration: <?php echo ($probe['endtime'] - $probe['starttime']) . "s"; ?></li>
+                                            <li>Battery usage: <?php echo $probe['batteryUsage']; ?>%</li>
+                                            <li>Location: <?php $loc = split("/", $probe['location']); echo number_format($loc[0], 4) . "/" . number_format($loc[1], 4); ?></li>
+                                        </ul>
+                                    </p>
                                     <h4>Command executed on the device</h4>                             
                                     <p class="margin">
                                         <code>$ su busybox tracebox <?php echo $probe['destination']; ?></code>

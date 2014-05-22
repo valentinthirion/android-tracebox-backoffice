@@ -142,7 +142,6 @@
 				}
 			}
 		</script>
-
 		<!-- FAVICON -->
 		<link rel="icon" type="image/png" href="img/favicon/favicon-32.png">
 		<!-- Shortcut links -->

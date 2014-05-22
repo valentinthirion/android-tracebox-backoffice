@@ -34,6 +34,32 @@
         return $d;
     }
 
+    function getProbesWithNumberOfRouters($max)
+    {
+        $d;
+    	if ($max != "")
+	        $d = mysql_query("  SELECT *, count(" . DB_PREFIX . "routers.id) as rNumber, " . DB_PREFIX . "probes.id as pID
+                                FROM " . DB_PREFIX . "probes
+                                INNER JOIN
+                                " . DB_PREFIX . "routers
+                                ON " . DB_PREFIX . "probes.id=" . DB_PREFIX . "routers.probe_id
+                                GROUP BY " . DB_PREFIX . "probes.id
+                                ORDER BY rNumber DESC
+                                LIMIT 0, $max")
+                                or die (mysql_error());
+	    else
+	    	$d = mysql_query("  SELECT *, count(" . DB_PREFIX . "routers.id) as rNumber, " . DB_PREFIX . "probes.id as pID
+                                FROM " . DB_PREFIX . "probes
+                                INNER JOIN
+                                " . DB_PREFIX . "routers
+                                ON " . DB_PREFIX . "probes.id=" . DB_PREFIX . "routers.probe_id
+                                GROUP BY " . DB_PREFIX . "probes.id
+                                ORDER BY rNumber DESC")
+                                or die (mysql_error());
+
+        return $d;
+    }
+
     function getProbeForID($id)
     {
         $id = mysql_real_escape_string(htmlspecialchars($id));
@@ -53,7 +79,7 @@
 	}
 
 	 function getProbesForDestination($IP)
-    {
+     {
         $IP = mysql_real_escape_string(htmlspecialchars($IP));
 
         $d = mysql_query("SELECT * FROM " . DB_PREFIX . "probes WHERE destination='$IP'") or die (mysql_error());
@@ -154,6 +180,7 @@
     function getRawProbeResult()
     {
         $d = mysql_query("  SELECT
+        						" . DB_PREFIX . "probes.id as pID,
                                 destination,
                                 location,
                                 starttime,
@@ -166,64 +193,71 @@
                                 address,
                                 layer,
                                 field
-                            FROM android_tracebox_probes
+                            FROM " . DB_PREFIX . "probes
                             RIGHT JOIN
                                 (SELECT
-                                    android_tracebox_routers.probe_id as pID,
+                                    " . DB_PREFIX . "routers.probe_id as pID,
                                     ttl,
                                     address,
                                     layer,
                                     field                            
-                                FROM android_tracebox_packetmodifications
-                                INNER JOIN android_tracebox_routers
-                                ON android_tracebox_routers.id= android_tracebox_packetmodifications.router_id
+                                FROM " . DB_PREFIX . "packetmodifications
+                                INNER JOIN " . DB_PREFIX . "routers
+                                ON " . DB_PREFIX . "routers.id= " . DB_PREFIX . "packetmodifications.router_id
                                 ) r1
                             ON
-                            android_tracebox_probes.id = r1.pID")
+                            " . DB_PREFIX . "probes.id = r1.pID")
                             or die (mysql_error());
 		
-        /*$d = mysql_query("  SELECT
-                                " . DB_PREFIX . "packetmodifications.layer,
-                                " . DB_PREFIX . "packetmodifications.field,
-                                " . DB_PREFIX . "packetmodifications.id as pmID,
-                                r1.rID,
-                                r1.ttl,
-                                r1.address,
-                                r1.destination,
-                                r1.location,
-                                r1.starttime,
-                                r1.endtime,
-                                r1.connectivityMode,
-                                r1.batteryUsage,
-                                r1.carrierType,
-                                r1.carrierName
-                            FROM " . DB_PREFIX . "packetmodifications
-                            INNER JOIN
-                                (SELECT
-                                    " . DB_PREFIX . "routers.id as rID,
-                                    " . DB_PREFIX . "routers.ttl,
-                                    " . DB_PREFIX . "routers.address,
-                                    " . DB_PREFIX . "probes.destination,
-                                    " . DB_PREFIX . "probes.location,
-                                    " . DB_PREFIX . "probes.starttime,
-                                    " . DB_PREFIX . "probes.endtime,
-                                    " . DB_PREFIX . "probes.connectivityMode,
-                                    " . DB_PREFIX . "probes.batteryUsage,
-                                    " . DB_PREFIX . "probes.carrierType,
-                                    " . DB_PREFIX . "probes.carrierName
-                                FROM " . DB_PREFIX . "routers
-                                INNER JOIN
-                                    " . DB_PREFIX . "probes
-                                ON
-                                " . DB_PREFIX . "routers.probe_id=" . DB_PREFIX . "probes.id)
-                            r1
-                            ON
-                            " . DB_PREFIX . "packetmodifications.router_id=r1.rID
-                            ")
-                            or die (mysql_error());
-        */
-        return $d;
+		return $d;
     }
 
+	function getCarriersAndTypes()
+	{
+		$d = mysql_query("	SELECT
+								carrierType, carrierName, count(id) as count
+							FROM " . DB_PREFIX . "probes
+							GROUP BY carrierType, carrierName
+						")
+						or die (mysql_error());
 
+		return $d;
+	}
+
+    function getProbesLocation()
+    {
+        $d = mysql_query("	SELECT DISTINCT location, count(id) as count, id
+                            FROM " . DB_PREFIX . "probes
+                            WHERE location!='0.0/0.0'
+                            GROUP BY location
+						")
+						or die (mysql_error());
+
+		return $d;
+    }
+
+    function converCoordinatesToLocale($coord)
+    {
+        sleep(0.1);
+        $c = split("/", $coord);            
+        $lat = $c[0];
+        $long = $c[1];
+        $url = 'http://maps.google.com/maps/api/geocode/json?latlng='. $lat . ',' . $long . '&sensor=false';
+        $geocode = file_get_contents($url);
+        $output = json_decode($geocode);
+        $address = $output->results[0]->formatted_address;//address_components[0]->country;
+
+        return $address;
+    }
+
+    function getConnetionModes()
+    {
+        $d = mysql_query("	SELECT DISTINCT connectivityMode, count(id) as count
+                            FROM " . DB_PREFIX . "probes
+                            GROUP BY connectivityMode
+						")
+						or die (mysql_error());
+
+		return $d;
+    }
 ?>

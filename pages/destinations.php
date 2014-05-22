@@ -93,12 +93,14 @@
         
                                             while ($destination = mysql_fetch_array($destinations))
                                             {
+                                                $d = getProbesForDestination($destination['address']);
+                                                $nb = mysql_num_rows($d);
                                                 ?>
                                                     <tr>
                                                         <td><?php echo $destination['id']; ?></td>
                                                         <td><a href="index.php?page=probes&action=probes_for_destination&destination_id=<?php echo $destination['address']; ?>"><?php echo $destination['name']; ?></a></td>
                                                         <td><a href="<?php echo $destination['address']; ?>" target="_blank"><?php echo $destination['address']; ?></a></td>
-                                                        <td>0</td>
+                                                        <td><?php echo $nb; ?></td>
                                                         <td>
                                                             <a href="index.php?page=destinations&action=delete&id=<?php echo $destination['id']; ?>"><i class="fa fa-fw fa-ban"></i></a>
                                                             <a href="index.php?page=probes&action=probes_for_destination&destination_id=<?php echo $destination['id']; ?>"><i class="fa fa-fw fa-road"></i></a>
