@@ -39,20 +39,12 @@
         return $d;
     }
 
-	function getPacketModificationsCountForRouterID($id, $noIPcS)
+	function getPacketModificationsCountForRouterID($id)
 	{
-		$d;
-		if (!$noIPcS)
-			$d = mysql_query("  SELECT COUNT(*) as count
-		                   		FROM " . DB_PREFIX . "packetmodifications
-						   		WHERE router_id=$id")
-						   		or die (mysql_error());
-		else
-			$d = mysql_query("  SELECT COUNT(*) as count
-		                   		FROM " . DB_PREFIX . "packetmodifications
-						   		WHERE router_id=$id and (layer!='IP' and field!='Checksum')")
-						   		or die (mysql_error());
-
+    	$d = mysql_query("  SELECT COUNT(*) as count
+	                   		FROM " . DB_PREFIX . "packetmodifications
+					   		WHERE router_id=$id")
+					   		or die (mysql_error());
         $d = mysql_fetch_array($d);
 
         return $d['count'];

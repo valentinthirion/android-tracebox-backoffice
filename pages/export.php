@@ -129,7 +129,7 @@
 												$nb = mysql_num_rows($data);
 												while ($p = mysql_fetch_array($data))
 												{
-													$exportText .= getPacketModificationsCountForProbeID($p['id'], true) . "\n";
+													$exportText .= getPacketModificationsCountForProbeID($p['id']) . "\n";
 												}
 												break;
 
@@ -171,7 +171,7 @@
 												$nb = mysql_num_rows($data);
 												while ($p = mysql_fetch_array($data))
 												{
-												    $n = getPacketModificationsCountForProbeID($p['id'], true);
+												    $n = getPacketModificationsCountForProbeID($p['id']);
 												    if ($n == 0)
     													$exportText .= $p['connectivityMode'] . ", " . $p['carrierName'] . ", " . $p['carrierType'] . "\n";
 												}
@@ -202,20 +202,24 @@
                                                 break;
 
                                             case 14: // Mods location
-                                                $exportText = "pID, #hops,  ---\n";
-												$data = getProbesWithNumberOfRouters(100);
+                                                $exportText = "1st mod\n";
+												$data = getProbes("");
 												$nb = mysql_num_rows($data);
 												while ($p = mysql_fetch_array($data))
 												{
-												    $exportText .= $p['pID'];
-												    $routers = getRoutersForProbeID($p['pID']);
-												    $exportText .= ", " . mysql_num_rows($routers);
+												    $routers = getRoutersForProbeID($p['id']);
+                                                    $nbOfRouters = mysql_num_rows($routers);
+                                                    // Get the first mod and print the ttl on 10                                              
 												    while ($r = mysql_fetch_array($routers))
 												    {
-    												    $pmNum = getPacketModificationsCountForRouterID($r['id'], true);
-   												        $exportText .= ", " . $pmNum;
+    												    $pmNum = getPacketModificationsCountForRouterID($r['id']);
+    												    if ($pmNum > 0)
+    												    {
+        												    $i = round(($r['ttl'] / $nbOfRouters) * 10, 1);
+        												    $exportText .= $i . "\n";
+        												    break;
+    												    }
 												    }
-												    $exportText .= "\n";
                                                 }
                                                 break;
 	                                    }
