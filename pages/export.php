@@ -41,6 +41,7 @@
 								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=export&mode=12');">Locations</button>
 								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=export&mode=13');">Connection modes</button>
 								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=export&mode=14');">Mods location</button>
+								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=export&mode=15');">Battery</button>
                             </div>
                             <div class="box-body pad table-responsive">
 								<button class="btn btn-primary" onclick="window.location.assign('index.php?page=export&mode=1');">Hops per probe</button>
@@ -220,6 +221,20 @@
         												    break;
     												    }
 												    }
+                                                }
+                                                break;
+
+                                            case 15: // Battery
+                                                $exportText = "battery consumption\n";
+												$data = getProbes("");
+												$nb = mysql_num_rows($data);
+												while ($p = mysql_fetch_array($data))
+												{
+												    if ($p['starttime'] > 1399680000) // Date when the battery consumption was added
+    												{
+    												    if ($p['batteryUsage'] != null)
+    												        $exportText .= $p['batteryUsage'] . "\n";
+    												}
                                                 }
                                                 break;
 	                                    }
