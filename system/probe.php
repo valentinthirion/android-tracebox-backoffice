@@ -14,10 +14,8 @@
 
 	function addNewProbe($destination, $starttime, $endtime, $connectivity, $location, $carrierName, $carrierType, $batteryUsage)
 	{
-	    echo $starttime . " | " . $endtime;
 		$starttime = strtotime($starttime);
 		$endtime = strtotime($endtime);
-		echo $starttime . " | " . $endtime;
 		mysql_query("INSERT INTO " . DB_PREFIX . "probes 	(destination, starttime, endtime, location, connectivityMode, carrierName, carrierType, batteryUsage)
 															VALUES 	('$destination', $starttime, $endtime, '$location', $connectivity, '$carrierName', '$carrierType', $batteryUsage)")
 															or die (mysql_error());															

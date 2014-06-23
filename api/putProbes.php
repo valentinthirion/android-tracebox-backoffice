@@ -47,7 +47,7 @@
 				foreach ($router as $packetmodification)
 				{
 					// New Packet modification
-					$mod_id = addNewPacketModification($router_id, $packetmodification['layer'], $packetmodification['field']);
+					addNewPacketModification($router_id, $packetmodification['layer'], $packetmodification['field']);
 				}
 			}
 	    }

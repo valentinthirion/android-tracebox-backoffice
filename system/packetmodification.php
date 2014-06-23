@@ -16,17 +16,21 @@
 	{
 		if ($layer == "IP")
 		{
-    		if (($field == "TTL") || ($field == "Checksum"))
-    		    return;
+    		if ($field == "Checksum")
+    		{
+				return true;
+    		}
+    		if ($field == "TTL")
+    		{
+    			return true;
+    		}
 		}
 
-		mysql_query("	INSERT
+		return mysql_query("	INSERT
 						INTO " . DB_PREFIX . "packetmodifications
 						(router_id, layer, field)
 						VALUES ($router_id, '$layer', '$field')")
 						or die (mysql_error());
-
-		return mysql_insert_id();
 	}
 
     function getPacketModificationsForRouterID($id)

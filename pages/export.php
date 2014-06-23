@@ -120,7 +120,7 @@
 												$nb = mysql_num_rows($data);
 												while ($p = mysql_fetch_array($data))
 												{
-													$exportText .= $p['id'] . ", " . $p['destination'] . ", " . $p['rNumber'] . "\n";
+													$exportText .= $p['rNumber'] . "\n"; // $p['id'] . ", " . $p['destination'] . ", " .
 												}
 												break;
 
